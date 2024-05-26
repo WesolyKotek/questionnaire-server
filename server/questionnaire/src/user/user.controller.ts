@@ -14,6 +14,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUser } from './dto/create-user.dto';
 import { UpdateUser } from './dto/update-user.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('/users')
 export class UserContoller {
@@ -29,6 +30,7 @@ export class UserContoller {
     return this.userService.findByEmail(email);
   }
 
+  @Public()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')

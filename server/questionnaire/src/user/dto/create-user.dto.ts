@@ -6,7 +6,7 @@ export class CreateUser {
   readonly email: string;
 
   @IsNotEmpty()
-  readonly password: string;
+  password: string;
 
   @IsNotEmpty()
   readonly firstname: string;
