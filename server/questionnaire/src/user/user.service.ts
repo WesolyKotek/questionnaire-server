@@ -2,6 +2,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
 import { CreateUser } from './dto/create-user.dto';
 import { UpdateUser } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 import {
   Injectable,
   NotFoundException,
@@ -48,6 +49,8 @@ export class UserService {
       );
     }
 
+    createUser.password = bcrypt.hashSync(createUser.password, 10);
+
     const user = await this.userModel.create({ ...createUser });
     return user;
   }
@@ -64,6 +67,10 @@ export class UserService {
     if (affectedCount === 0) {
       this.logger.warn(`User with id ${id} not found for update`);
       throw new NotFoundException(`User with id ${id} not found for update`);
+    }
+
+    if (updateUser.password) {
+      updateUser.password = bcrypt.hashSync(updateUser.password, 10);
     }
 
     return [affectedCount, affectedRows];
