@@ -21,6 +21,7 @@ export class UserService {
 
   async findById(id: string): Promise<User> {
     const user = await this.userModel.findOne({ where: { id } });
+
     if (!user) {
       this.logger.warn(`User with id ${id} not found`);
       throw new NotFoundException(`User with id ${id} not found`);
