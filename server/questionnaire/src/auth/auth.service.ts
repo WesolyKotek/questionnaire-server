@@ -15,7 +15,12 @@ export class AuthService {
     if (!bcrypt.compareSync(pass, user.password)) {
       throw new UnauthorizedException(`Password is incorrect`);
     }
-    const payload = { sub: user.id, email: user.email };
+    const payload = {
+      id: user.id,
+      email: user.email,
+      faculty: user.facultyDepartment,
+      isAdmin: user.admin,
+    };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

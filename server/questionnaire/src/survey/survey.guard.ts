@@ -5,21 +5,27 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { SurveyService } from './survey.service';
 
 @Injectable()
-export class UserProfileGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+export class UserSurveyGuard implements CanActivate {
+  constructor(
+    private reflector: Reflector,
+    private surveyService: SurveyService,
+  ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    if (!user) {
-      throw new ForbiddenException('User not authenticated');
-    }
+    const surveyId = request.params.id;
+    const hasAccess = this.surveyService.checkAccess(
+      surveyId,
+      user.id,
+      user.faculty,
+    );
 
-    const userId = request.params.id;
-    if (userId && user.id != userId) {
+    if (!hasAccess) {
       throw new ForbiddenException('You do not have permission');
     }
 

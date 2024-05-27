@@ -7,19 +7,14 @@ import {
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
-export class UserProfileGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    if (!user) {
-      throw new ForbiddenException('User not authenticated');
-    }
-
-    const userId = request.params.id;
-    if (userId && user.id != userId) {
+    if (!user.isAdmin) {
       throw new ForbiddenException('You do not have permission');
     }
 
