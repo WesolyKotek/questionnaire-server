@@ -10,7 +10,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -27,11 +26,6 @@ export class UserContoller {
   @Get(':id')
   getById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findById(id);
-  }
-
-  @UseGuards(UserProfileGuard)
-  getByEmail(@Query('email') email: string) {
-    return this.userService.findByEmail(email);
   }
 
   @Public()

@@ -18,8 +18,14 @@ export class Question extends Model<Question> {
   })
   surveyId: number;
 
-  @BelongsTo(() => Survey)
+  @BelongsTo(() => Survey, { onDelete: 'CASCADE' })
   survey: Survey;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  questionId: number;
 
   @Column({
     type: DataType.STRING,
@@ -33,6 +39,7 @@ export class Question extends Model<Question> {
   })
   description: string;
 
+  @ForeignKey(() => AnswerType)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,

@@ -1,21 +1,27 @@
-import { IsString, IsOptional, IsArray, IsObject } from 'class-validator';
+import { IsString, IsOptional, IsDate, IsJSON } from 'class-validator';
 
-export class UpdateSurveyDto {
+export class UpdateSurvey {
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  title: string;
+  readonly title?: string;
 
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  description: string;
+  readonly description?: string;
 
-  @IsArray()
   @IsOptional()
-  @IsObject({ each: true })
-  userAccess?: number[];
+  @IsDate()
+  readonly startDate?: Date;
 
-  @IsArray()
   @IsOptional()
-  @IsObject({ each: true })
-  facultyAccess?: number[];
+  @IsDate()
+  readonly expirationDate?: Date;
+
+  @IsOptional()
+  @IsJSON()
+  readonly userAccess?: number[];
+
+  @IsOptional()
+  @IsJSON()
+  readonly facultyAccess?: number[];
 }

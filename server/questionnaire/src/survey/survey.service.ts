@@ -1,17 +1,27 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Survey } from './models/survey.model';
-import { CreateSurveyDto } from './dto/create-survey.dto';
-import { UpdateSurveyDto } from './dto/update-survey.dto';
+import { CreateSurvey } from './dto/create-survey.dto';
+import { UpdateSurvey } from './dto/update-survey.dto';
 import { Op } from 'sequelize';
 import { Question } from './models/question.model';
+import { CreateUserAnswer } from './dto/create-user-answer.dto';
+import { UserAnswer } from './models/user-answer.model';
+import { CreateQuestion } from './dto/create-question.dto';
 
 @Injectable()
 export class SurveyService {
   constructor(
     @InjectModel(Survey)
     private surveyModel: typeof Survey,
+    @InjectModel(Question)
     private questionModel: typeof Question,
+    @InjectModel(UserAnswer)
+    private userAnswerModel: typeof UserAnswer,
   ) {}
 
   async findAll(): Promise<Survey[]> {
@@ -26,31 +36,108 @@ export class SurveyService {
     return survey;
   }
 
-  async findSurveyPage(id: number): Promise<Survey> {
+  async findSurveyAndQuestions(
+    userId: number,
+    id: number,
+  ): Promise<{ survey: Survey; questions: Question[] }> {
     const survey = await this.surveyModel.findByPk(id);
+
     if (!survey) {
       throw new NotFoundException(`Survey with id ${id} not found`);
     }
-    //const questions = await this.questionModel.findByFk(id);
 
-    return survey;
+    const surveyAlreadyPassed = await this.checkSurveyPassed(userId, id);
+    if (surveyAlreadyPassed) {
+      throw new ForbiddenException('The survey has already been completed');
+    }
+
+    const now = new Date();
+    if (
+      now < new Date(survey.startDate) ||
+      now > new Date(survey.expirationDate)
+    ) {
+      throw new ForbiddenException(
+        'Survey is either not started yet or has already ended',
+      );
+    }
+
+    const questions = await this.questionModel.findAll({
+      where: { surveyId: id },
+    });
+
+    return { survey, questions };
   }
 
-  async create(createSurveyDto: CreateSurveyDto): Promise<Survey> {
+  async saveUserAnswers(
+    userId: number,
+    createUserAnswer: CreateUserAnswer,
+  ): Promise<boolean> {
+    const { surveyId, answers } = createUserAnswer;
+
+    const surveyAlreadyPassed = await this.checkSurveyPassed(userId, surveyId);
+    if (surveyAlreadyPassed) {
+      throw new ForbiddenException('The survey has already been completed');
+    }
+
+    for (const answer of answers) {
+      await this.userAnswerModel.create({
+        surveyId,
+        questionId: answer.questionId,
+        userId,
+        answer: answer.answer,
+        submittedAt: new Date(),
+      });
+    }
+
+    return true;
+  }
+
+  async checkSurveyPassed(userId: number, surveyId: number): Promise<boolean> {
+    const userAnswers = await this.userAnswerModel.findAll({
+      where: {
+        userId,
+        surveyId,
+      },
+    });
+
+    return userAnswers.length > 0;
+  }
+
+  async createSurvey(createSurvey: CreateSurvey): Promise<Survey> {
     const survey = new Survey({
-      ...createSurveyDto,
+      ...createSurvey,
     });
     return survey.save();
   }
 
-  async update(id: number, updateSurveyDto: UpdateSurveyDto): Promise<Survey> {
+  async createQuestions(
+    surveyId: number,
+    createQuestion: CreateQuestion,
+  ): Promise<boolean> {
+    const { questions } = createQuestion;
+    for (const question of questions) {
+      await this.questionModel.create({
+        surveyId,
+        ...question,
+      });
+    }
+
+    return true;
+  }
+
+  async update(id: number, updateSurvey: UpdateSurvey): Promise<Survey> {
     const survey = await this.findById(id);
-    survey.update(updateSurveyDto);
+    survey.update(updateSurvey);
     return survey;
   }
 
   async remove(id: number): Promise<void> {
-    const survey = await this.findById(id);
+    const survey = await this.surveyModel.findByPk(id, {
+      include: [Question, UserAnswer],
+    });
+    if (!survey) {
+      throw new NotFoundException(`Survey with id ${id} not found`);
+    }
     await survey.destroy();
   }
 
@@ -76,7 +163,7 @@ export class SurveyService {
     userId: number,
     facultyDepartmentId: number,
   ): Promise<Survey[]> {
-    return this.surveyModel.findAll({
+    const surveys = this.surveyModel.findAll({
       where: {
         [Op.or]: [
           { userAccess: { [Op.contains]: [userId] } },
@@ -84,5 +171,6 @@ export class SurveyService {
         ],
       },
     });
+    return surveys;
   }
 }

@@ -1,4 +1,6 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
+import { Question } from './question.model';
+import { UserAnswer } from './user-answer.model';
 
 @Table
 export class Survey extends Model<Survey> {
@@ -38,4 +40,10 @@ export class Survey extends Model<Survey> {
     allowNull: true,
   })
   facultyAccess: number[];
+
+  @HasMany(() => Question, { onDelete: 'CASCADE' })
+  questions: Question[];
+
+  @HasMany(() => UserAnswer, { onDelete: 'CASCADE' })
+  userAnswers: UserAnswer[];
 }
