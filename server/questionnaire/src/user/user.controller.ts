@@ -7,30 +7,25 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUser } from './dto/create-user.dto';
 import { UpdateUser } from './dto/update-user.dto';
-import { UserGuard } from './user.guard';
+import { UserProfileGuard } from './user.guard';
 import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('/users')
 export class UserContoller {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(UserGuard)
+  @UseGuards(UserProfileGuard)
   @Get(':id')
-  getById(@Param('id') id: string) {
+  getById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findById(id);
-  }
-
-  @UseGuards(UserGuard)
-  getByEmail(@Query('email') email: string) {
-    return this.userService.findByEmail(email);
   }
 
   @Public()
@@ -41,15 +36,18 @@ export class UserContoller {
     return this.userService.create(createUser);
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(UserProfileGuard)
   @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() updateUser: UpdateUser) {
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUser: UpdateUser,
+  ) {
     return this.userService.update(id, updateUser);
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(UserProfileGuard)
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.remove(id);
   }
 }
