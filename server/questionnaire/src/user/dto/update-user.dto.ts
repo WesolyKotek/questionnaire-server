@@ -1,26 +1,44 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MinLength,
+  IsDate,
+} from 'class-validator';
 
 export class UpdateUser {
   @IsEmail()
-  @IsNotEmpty()
-  readonly email: string;
+  @IsOptional()
+  readonly email?: string;
 
-  @IsNotEmpty()
-  readonly password: string;
+  @IsString()
+  @IsOptional()
+  @MinLength(6)
+  readonly password?: string;
 
-  @IsNotEmpty()
-  readonly firstname: string;
+  @IsString()
+  @IsOptional()
+  readonly firstname?: string;
 
-  @IsNotEmpty()
-  readonly lastname: string;
+  @IsString()
+  @IsOptional()
+  readonly lastname?: string;
 
-  @IsNotEmpty()
-  readonly sex: number;
+  @IsNumber()
+  @IsOptional()
+  readonly sex?: number;
 
-  @IsNotEmpty()
-  readonly birthdate: Date;
+  @IsDate()
+  @IsOptional()
+  readonly birthdate?: Date;
 
-  readonly admin: number;
+  @IsBoolean()
+  @IsOptional()
+  readonly admin?: boolean;
 
-  readonly lastlogin: Date;
+  @IsDate()
+  @IsOptional()
+  readonly lastlogin?: Date;
 }

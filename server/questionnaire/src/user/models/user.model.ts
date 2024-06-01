@@ -1,21 +1,71 @@
-import { Table, Model, Column } from 'sequelize-typescript';
+import {
+  Table,
+  Model,
+  Column,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+} from 'sequelize-typescript';
+import { FacultyDepartment } from 'src/faculty-department/models/faculty-department.model';
 
 @Table
-export class User extends Model {
-  @Column
+export class User extends Model<User> {
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+  })
   email: string;
-  @Column
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   password: string;
-  @Column
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   firstname: string;
-  @Column
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   lastname: string;
-  @Column
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
   sex: number;
-  @Column
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
   birthdate: Date;
-  @Column({ defaultValue: 0 })
-  admin: number;
-  @Column({ defaultValue: Date.now() })
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  admin: boolean;
+
+  @Column({
+    type: DataType.DATE,
+    defaultValue: DataType.NOW,
+  })
   lastlogin: Date;
+
+  @ForeignKey(() => FacultyDepartment)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  facultyDepartmentId: number;
+
+  @BelongsTo(() => FacultyDepartment)
+  facultyDepartment: FacultyDepartment;
 }

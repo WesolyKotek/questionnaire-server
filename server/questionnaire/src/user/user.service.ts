@@ -2,6 +2,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
 import { CreateUser } from './dto/create-user.dto';
 import { UpdateUser } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 import {
   Injectable,
   NotFoundException,
@@ -18,8 +19,9 @@ export class UserService {
     private userModel: typeof User,
   ) {}
 
-  async findById(id: string): Promise<User> {
-    const user = await this.userModel.findOne({ where: { id } });
+  async findById(id: number): Promise<User> {
+    const user = await this.userModel.findByPk(id);
+
     if (!user) {
       this.logger.warn(`User with id ${id} not found`);
       throw new NotFoundException(`User with id ${id} not found`);
@@ -48,13 +50,23 @@ export class UserService {
       );
     }
 
-    const user = await this.userModel.create({ ...createUser });
+    const hashedPassword = bcrypt.hashSync(createUser.password, 10);
+
+    const user = await this.userModel.create({
+      ...createUser,
+      password: hashedPassword,
+    });
     return user;
   }
 
-  async update(id: string, updateUser: UpdateUser): Promise<[number, User[]]> {
+  async update(id: number, updateUser: UpdateUser): Promise<[number, User[]]> {
+    const updateData = { ...updateUser };
+    if (updateUser.password) {
+      updateData.password = await bcrypt.hash(updateUser.password, 10);
+    }
+
     const [affectedCount, affectedRows] = await this.userModel.update(
-      { ...updateUser },
+      { ...updateData },
       {
         where: { id },
         returning: true,
@@ -69,7 +81,7 @@ export class UserService {
     return [affectedCount, affectedRows];
   }
 
-  async updateLastLogin(id: string): Promise<[number]> {
+  async updateLastLogin(id: number): Promise<[number]> {
     const [affectedCount] = await this.userModel.update(
       { lastlogin: new Date() },
       {
@@ -87,7 +99,7 @@ export class UserService {
     return [affectedCount];
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     const user = await this.findById(id);
     if (!user) {
       this.logger.warn(`User with id ${id} not found for delete`);
