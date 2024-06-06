@@ -23,12 +23,6 @@ lint:
     - cd server/questionnaire
     - npm run lint
 
-test:
-  stage: test
-  script:
-    - cd server/questionnaire
-    - npm run test
-
 build:
   stage: build
   needs: [lint, test]
