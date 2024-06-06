@@ -15,11 +15,10 @@ cache:
 install:
   stage: install
   script:
-    - npm install -g npm@6.14.8
     - cd client/sProject
-    - npm ci
+    - npm ci --legacy-peer-deps
     - cd ../../server/questionnaire
-    - npm ci 
+    - npm ci --legacy-peer-deps
 
 lint:
   stage: test
