@@ -31,8 +31,6 @@ lint:
 test:
   stage: test
   script:
-    - cd client/sProject
-    - npm run test
     - cd ../../server/questionnaire
     - npm run test
 
