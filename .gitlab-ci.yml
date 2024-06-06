@@ -22,7 +22,7 @@ install-front:
 install-back:
   stage: install
   script:
-    - cd server/Questionnaire
+    - cd server/questionnaire
     - npm ci
   cache:
     paths:
@@ -31,7 +31,7 @@ install-back:
 test-front:
   stage: test
   script:
-    - cd server/Questionnaire
+    - cd server/questionnaire
     - npm run test
 
 test-back:
@@ -52,8 +52,8 @@ build-front:
 build-backend:
   stage: build
   script:
-    - cd server/Questionnaire
+    - cd server/questionnaire
     - npm run build
   artifacts:
     paths:
-      - server/Questionnaire/dist
+      - server/questionnaire/dist
