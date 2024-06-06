@@ -7,53 +7,45 @@ variables:
   NODE_ENV: 'production'
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/
+    - client/sProject/node_modules/
+    - server/questionnaire/node_modules/
 
-install-front:
+install:
   stage: install
   script:
     - cd client/sProject
-    - npm ci
-  cache:
-    paths:
-      - client/sProject/node_modules/
+    - npm ci --legacy-peer-deps
+    - cd ../../server/questionnaire
+    - npm ci --legacy-peer-deps
 
-install-back:
-  stage: install
-  script:
-    - cd server/questionnaire
-    - npm ci
-  cache:
-    paths:
-      - server/Questionnaire/node_modules/
-
-test-front:
+lint:
   stage: test
   script:
-    - cd server/questionnaire
-    - npm run test
+    - cd client/sProject
+    - npm run lint
+    - cd ../../server/questionnaire
+    - npm run lint
 
-test-back:
+test:
   stage: test
   script:
     - cd client/sProject
     - npm run test
+    - cd ../../server/questionnaire
+    - npm run test
 
-build-front:
+build:
   stage: build
+  needs: [lint, test]
   script:
     - cd client/sProject
+    - npm run build
+    - cd ../../server/questionnaire
     - npm run build
   artifacts:
     paths:
       - client/sProject/dist
-
-build-backend:
-  stage: build
-  script:
-    - cd server/questionnaire
-    - npm run build
-  artifacts:
-    paths:
       - server/questionnaire/dist
+
