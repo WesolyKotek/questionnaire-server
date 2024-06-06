@@ -1,0 +1,59 @@
+stages:
+  - install
+  - test
+  - build
+
+variables:
+  NODE_ENV: 'production'
+
+cache:
+  paths:
+    - node_modules/
+
+install-front:
+  stage: install
+  script:
+    - cd client/sProject
+    - npm ci
+  cache:
+    paths:
+      - client/sProject/node_modules/
+
+install-back:
+  stage: install
+  script:
+    - cd server/Questionnaire
+    - npm ci
+  cache:
+    paths:
+      - server/Questionnaire/node_modules/
+
+test-front:
+  stage: test
+  script:
+    - cd server/Questionnaire
+    - npm run test
+
+test-back:
+  stage: test
+  script:
+    - cd client/sProject
+    - npm run test
+
+build-front:
+  stage: build
+  script:
+    - cd client/sProject
+    - npm run build
+  artifacts:
+    paths:
+      - client/sProject/dist
+
+build-backend:
+  stage: build
+  script:
+    - cd server/Questionnaire
+    - npm run build
+  artifacts:
+    paths:
+      - server/Questionnaire/dist
