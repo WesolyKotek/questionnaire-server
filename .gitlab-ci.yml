@@ -23,15 +23,13 @@ install:
 lint:
   stage: test
   script:
-    - cd client/sProject
-    - npm run lint
-    - cd ../../server/questionnaire
+    - cd server/questionnaire
     - npm run lint
 
 test:
   stage: test
   script:
-    - cd ../../server/questionnaire
+    - cd server/questionnaire
     - npm run test
 
 build:
