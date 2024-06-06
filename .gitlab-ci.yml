@@ -25,7 +25,7 @@ lint:
 
 build:
   stage: build
-  needs: [lint, test]
+  needs: [lint]
   script:
     - cd client/sProject
     - npm run build
