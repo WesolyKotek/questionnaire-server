@@ -16,9 +16,9 @@ install:
   stage: install
   script:
     - cd client/sProject
-    - npm ci --legacy-peer-deps
+    - npm ci 
     - cd ../../server/questionnaire
-    - npm ci --legacy-peer-deps
+    - npm ci 
 
 lint:
   stage: test
