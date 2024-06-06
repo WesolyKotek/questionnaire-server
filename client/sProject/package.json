@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "eslint": "^9.4.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2",
     "vuejs-datepicker": "^1.6.2"
