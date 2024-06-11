@@ -6,33 +6,23 @@ stages:
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - client/sProject/node_modules/
-    - server/questionnaire/node_modules/
+    - node_modules/
 
-install:
+install-job:
   stage: install
   script:
-    - cd client/sProject
-    - npm ci --legacy-peer-deps
-    - cd ../../server/questionnaire
-    - npm ci --legacy-peer-deps
+    - npm ci
 
-lint:
+lint-job:
   stage: test
   script:
-    - cd server/questionnaire
     - npm run lint
 
-build:
+build-job:
   stage: build
-  needs: [lint]
+  needs: [lint-job]
   script:
-    - cd client/sProject
-    - npm run build
-    - cd ../../server/questionnaire
     - npm run build
   artifacts:
     paths:
-      - client/sProject/dist
-      - server/questionnaire/dist
-
+      - dist/
