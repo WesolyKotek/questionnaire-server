@@ -39,6 +39,9 @@ export class UserAnswer extends Model<UserAnswer> {
   })
   userId: number;
 
+  @BelongsTo(() => User)
+  user: User;
+
   @Column({
     type: DataType.JSON,
     allowNull: true,

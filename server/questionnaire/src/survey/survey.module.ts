@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { SurveyController } from './survey.contoller';
+import { SurveyController } from './survey.controller';
 import { SurveyService } from './survey.service';
 import { Question } from './models/question.model';
 import { Survey } from './models/survey.model';
