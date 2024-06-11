@@ -9,6 +9,7 @@ cache:
     - node_modules/
 
 install-job:
+  image: node:20
   stage: install
   script:
     - npm ci
