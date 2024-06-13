@@ -18,15 +18,6 @@ lint-job:
   script:
     - npm run lint
 
-build-job:
-  stage: build
-  needs: [lint-job]
-  script:
-    - npm run build
-  artifacts:
-    paths:
-      - dist/
-
 build-push:
   needs: [lint-job]
   rules:
