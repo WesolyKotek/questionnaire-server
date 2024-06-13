@@ -18,7 +18,7 @@ export class AuthService {
     const payload = {
       id: user.id,
       email: user.email,
-      faculty: user.facultyDepartment,
+      faculty: user.facultyDepartmentId,
       isAdmin: user.admin,
     };
     return {
