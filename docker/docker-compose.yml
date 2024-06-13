@@ -1,5 +1,5 @@
 version: '3'
-name: quest
+name: questionnaire
 services:
   app:
     restart: unless-stopped
@@ -19,14 +19,14 @@ services:
     ports:
       - '2502:5432'
     volumes:
-      - child_data:/var/lib/postgresql/data
+      - questionnaire_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=6666
     networks:
-      - quest-net
+      - questionnaire-net
 
 volumes:
-  quest_data:
+  questionnaire_data:
 
 networks:
-  quest-net:
+  questionnaire-net:
