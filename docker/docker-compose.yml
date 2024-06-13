@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     image: registry.qpilipp.ru/psu-mkr-2024/5-fanclub/questionnaire:${CI_COMMIT_TAG:?error}
     ports:
-      - 4500:4500
+      - 4550:3000
     environment:
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
@@ -17,7 +17,7 @@ services:
     image: postgres:16.2
     restart: unless-stopped
     ports:
-      - '2502:5432'
+      - '4551:5432'
     volumes:
       - questionnaire_data:/var/lib/postgresql/data
     environment:
