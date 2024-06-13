@@ -67,7 +67,7 @@
             "answerOptions": [
                 {
                     "optionCount": 1,
-                    "optionTitle": "Опция 1"
+                    "optionTitle": "Ответ 1"
                 }
             ],
             "maxAnswerCount": 1,
