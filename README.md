@@ -1,73 +1,197 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+**Endpoint:** `/surveys`
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## admin
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### 1. Получить все опросы
 
-## Description
+**Метод:** GET `/admin`
+**Описание:** Получить все опросы.
+**Guards:** AdminGuard
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Ответ:**
 
-## Installation
+````json
+[
+    {
+        "id": 1,
+        "title": "Опрос 1",
+        "description": "Описание опроса 1",
+        "startDate": "2024-06-01T00:00:00Z",
+        "expirationDate": "2024-06-30T00:00:00Z"
+    },
+    ...
+]
 
-```bash
-$ npm install
-```
+### 2. Создать опрос
+**Метод:** POST /
+**Описание:** Создать новый опрос.
+**Guards:** AdminGuard
 
-## Running the app
+**Тело запроса:**
+```json
+{
+    "title": "Название опроса",
+    "description": "Описание опроса",
+    "startDate": "2024-06-01T00:00:00Z",
+    "expirationDate": "2024-06-30T00:00:00Z"
+}
 
-```bash
-# development
-$ npm run start
+**Ответ:**
+```json
+{
+    "id": 1,
+    "title": "Название опроса",
+    "description": "Описание опроса",
+    "startDate": "2024-06-01T00:00:00Z",
+    "expirationDate": "2024-06-30T00:00:00Z"
+}
+###3. Создать вопросы для опроса
+**Метод:** POST /:id/question
+**Описание:** Добавить вопросы к опросу.
+**Guards:** AdminGuard
+**Тело запроса:**
+```json
+{
+    "questions": [
+        {
+            "title": "Вопрос 1",
+            "description": "Описание вопроса 1",
+            "answerType": 1,
+            "answerOptions": [
+                {
+                    "optionCount": 1,
+                    "optionTitle": "Опция 1"
+                }
+            ],
+            "maxAnswerCount": 1,
+            "attachedImages": ["image1.png"]
+        },
+        ...
+    ]
+}
 
-# watch mode
-$ npm run start:dev
+**Ответ:**
+```json
+true
 
-# production mode
-$ npm run start:prod
-```
+###4. Обновить опрос
+**Метод:** PATCH /:id**
+**Описание:** Обновить существующий опрос.
+**Guards:** AdminGuard
 
-## Test
+**Тело запроса:**
+```json
+{
+    "title": "Обновленное название опроса",
+    "description": "Обновленное описание опроса",
+    "startDate": "2024-06-10T00:00:00Z",
+    "expirationDate": "2024-07-10T00:00:00Z"
+}
 
-```bash
-# unit tests
-$ npm run test
+**Ответ:**
+```json
+{
+    "id": 1,
+    "title": "Обновленное название опроса",
+    "description": "Обновленное описание опроса",
+    "startDate": "2024-06-10T00:00:00Z",
+    "expirationDate": "2024-07-10T00:00:00Z"
+}
 
-# e2e tests
-$ npm run test:e2e
+###5. Удалить опрос
+**Метод:** DELETE /:id
+**Описание:** Удалить опрос.
+**Guards:** AdminGuard
 
-# test coverage
-$ npm run test:cov
-```
+Ответ:
+```json
+204 No Content
 
-## Support
+## user
+###1. Получить опрос по ID
+**Метод:** GET /:id
+**Описание:** Получить опрос по его ID.
+**Guards:** UserSurveyGuard
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**Ответ:**
+```json
+{
+    "id": 1,
+    "title": "Опрос 1",
+    "description": "Описание опроса 1",
+    "startDate": "2024-06-01T00:00:00Z",
+    "expirationDate": "2024-06-30T00:00:00Z"
+}
+###2. Получить опрос и вопросы по ID (Начать опрос)
+**Метод:** GET /:id/start
+**Описание:** Получить опрос и его вопросы по ID опроса.
+**Guards:** UserSurveyGuard
 
-## Stay in touch
+**Ответ:**
+```json
+{
+    "survey": {
+        "id": 1,
+        "title": "Опрос 1",
+        "description": "Описание опроса 1",
+        "startDate": "2024-06-01T00:00:00Z",
+        "expirationDate": "2024-06-30T00:00:00Z"
+    },
+    "questions": [
+        {
+            "id": 1,
+            "title": "Вопрос 1",
+            "description": "Описание вопроса 1",
+            "answerType": 1,
+            "answerOptions": [
+                {
+                    "optionCount": 1,
+                    "optionTitle": "Опция 1"
+                }
+            ],
+            "maxAnswerCount": 1,
+            "attachedImages": ["image1.png"]
+        },
+        ...
+    ]
+}
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+###3. Получить доступные опросы для пользователя
+**Метод:** GET /
+**Описание:** Получить опросы, доступные пользователю.
 
-## License
+**Ответ:**
+```json
+[
+    {
+        "id": 1,
+        "title": "Опрос 1",
+        "description": "Описание опроса 1",
+        "startDate": "2024-06-01T00:00:00Z",
+        "expirationDate": "2024-06-30T00:00:00Z"
+    },
+    ...
+]
 
-Nest is [MIT licensed](LICENSE).
+###4. Ответить на вопросы опроса
+**Метод:** POST /
+**Описание:** Ответить на вопросы опроса.
+**Guards:** UserSurveyGuard
+
+**Тело запроса:**
+```json
+{
+    "surveyId": 1,
+    "answers": [
+        {
+            "questionId": 1,
+            "answer": "Ответ на вопрос 1"
+        },
+        ...
+    ]
+}
+
+**Ответ:**
+```json
+true
+````
