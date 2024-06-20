@@ -3,9 +3,11 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
+import { UserSexEnum } from '../enums/user-sex.enum';
 
 export class CreateUser {
   @IsEmail()
@@ -27,9 +29,13 @@ export class CreateUser {
 
   @IsNumber()
   @IsNotEmpty()
-  readonly sex: number;
+  readonly sex: UserSexEnum;
 
   @IsDate()
   @IsNotEmpty()
   readonly birthdate: Date;
+
+  @IsNumber()
+  @IsOptional()
+  readonly facultyDepartmentId: number;
 }

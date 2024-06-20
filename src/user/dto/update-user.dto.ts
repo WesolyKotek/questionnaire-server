@@ -7,6 +7,7 @@ import {
   MinLength,
   IsDate,
 } from 'class-validator';
+import { UserSexEnum } from '../enums/user-sex.enum';
 
 export class UpdateUser {
   @IsEmail()
@@ -28,7 +29,7 @@ export class UpdateUser {
 
   @IsNumber()
   @IsOptional()
-  readonly sex?: number;
+  readonly sex?: UserSexEnum;
 
   @IsDate()
   @IsOptional()
@@ -41,4 +42,8 @@ export class UpdateUser {
   @IsDate()
   @IsOptional()
   readonly lastlogin?: Date;
+
+  @IsNumber()
+  @IsOptional()
+  readonly facultyDepartmentId?: number;
 }

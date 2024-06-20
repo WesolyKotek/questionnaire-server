@@ -8,7 +8,9 @@ import {
   NotFoundException,
   Logger,
   ConflictException,
+  ForbiddenException,
 } from '@nestjs/common';
+import { UserSexEnum } from './enums/user-sex.enum';
 
 @Injectable()
 export class UserService {
@@ -48,6 +50,10 @@ export class UserService {
       throw new ConflictException(
         `User with email ${createUser.email} already exists`,
       );
+    }
+
+    if (!Object.values(UserSexEnum).includes(createUser.sex)) {
+      throw new ForbiddenException('Invalid user sex');
     }
 
     const hashedPassword = bcrypt.hashSync(createUser.password, 10);
