@@ -7,6 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { FacultyDepartment } from 'src/faculty-department/models/faculty-department.model';
+import { UserSexEnum } from '../enums/user-sex.enum';
 
 @Table
 export class User extends Model<User> {
@@ -39,7 +40,7 @@ export class User extends Model<User> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  sex: number;
+  sex: UserSexEnum;
 
   @Column({
     type: DataType.DATE,
@@ -62,7 +63,7 @@ export class User extends Model<User> {
   @ForeignKey(() => FacultyDepartment)
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,
+    allowNull: true,
   })
   facultyDepartmentId: number;
 

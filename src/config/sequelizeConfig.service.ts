@@ -7,7 +7,6 @@ import { EnumConfig } from './enumConfig/enumConfig';
 import { User } from 'src/user/models/user.model';
 import { Injectable } from '@nestjs/common';
 import { FacultyDepartment } from 'src/faculty-department/models/faculty-department.model';
-import { AnswerType } from 'src/survey/models/answer-type.model';
 import { Question } from 'src/survey/models/question.model';
 import { Survey } from 'src/survey/models/survey.model';
 import { UserAnswer } from 'src/survey/models/user-answer.model';
@@ -29,14 +28,7 @@ export class SequelizeConfigService implements SequelizeOptionsFactory {
       username,
       password,
       database,
-      models: [
-        User,
-        Survey,
-        Question,
-        UserAnswer,
-        AnswerType,
-        FacultyDepartment,
-      ],
+      models: [User, Survey, Question, UserAnswer, FacultyDepartment],
       autoLoadModels: true,
       synchronize: true,
     };
