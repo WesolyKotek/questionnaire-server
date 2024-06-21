@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { Survey } from './survey.model';
-import { AnswerType } from './answer-type.model';
+import { AnswerTypeEnum } from '../enums/answer-type.enum';
 
 @Table
 export class Question extends Model<Question> {
@@ -39,15 +39,11 @@ export class Question extends Model<Question> {
   })
   description: string;
 
-  @ForeignKey(() => AnswerType)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  answerType: number;
-
-  @BelongsTo(() => AnswerType)
-  answer: AnswerType;
+  answerType: AnswerTypeEnum;
 
   @Column({
     type: DataType.JSON,
