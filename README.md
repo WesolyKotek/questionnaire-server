@@ -9,7 +9,7 @@
 **Guards:** AdminGuard
 
 **Ответ:**
-```json
+```ts
 [
     {
         "id": 1,
@@ -30,7 +30,7 @@
 **Guards:** AdminGuard
 
 **Тело запроса:**
-```json
+```ts
 {
     "title": "Название опроса",
     "description": "Описание опроса",
@@ -40,7 +40,7 @@
 ```
 
 **Ответ:**
-```json
+```ts
 {
     "id": 1,
     "title": "Название опроса",
@@ -57,7 +57,7 @@
 **Guards:** AdminGuard
 
 **Тело запроса:**
-```json
+```ts
 {
     "questions": [
         {
@@ -79,7 +79,7 @@
 ```
 
 **Ответ:**
-```json
+```ts
 true
 ```
 ### 4. Обновить опрос
@@ -90,7 +90,7 @@ true
 **Guards:** AdminGuard
 
 **Тело запроса:**
-```json
+```ts
 {
     "title": "Обновленное название опроса",
     "description": "Обновленное описание опроса",
@@ -100,7 +100,7 @@ true
 ```
 
 **Ответ:**
-```json
+```ts
 {
     "id": 1,
     "title": "Обновленное название опроса",
@@ -118,7 +118,7 @@ true
 **Guards:** AdminGuard
 
 Ответ:
-```json
+```ts
 204 No Content
 ```
 ## Endpoint: `/facultyDepartment`
@@ -131,7 +131,7 @@ true
 **Guards:** AdminGuard
 
 **Ответ:**
-```json
+```ts
 {
     "id": 1,
     "faculty": "Механико-математический факультет",
@@ -146,7 +146,7 @@ true
 **Guards:** AdminGuard
 
 **Тело запроса:**
-```json
+```ts
 {
     "faculty": "Механико-математический факультет",
     "department": "Прикладная математика и информатика"
@@ -154,7 +154,7 @@ true
 ```
 
 **Ответ:**
-```json
+```ts
 {
     "id": 1,
     "faculty": "Механико-математический факультет",
@@ -170,7 +170,7 @@ true
 
 **Тело запроса:**
 
-```json
+```ts
 {
     "faculty": "Физико-математический факультет",
     "department": "Прикладная математика и информатика"
@@ -178,7 +178,7 @@ true
 ```
 **Ответ:**
 
-```json
+```ts
 [
     1,
     [
@@ -198,7 +198,7 @@ true
 **Guards:** AdminGuard
 
 **Ответ:**
-```json
+```ts
 204 No Content
 ```
 
@@ -212,7 +212,7 @@ true
 **Guards:** UserSurveyGuard
 
 **Ответ:**
-```json
+```ts
 {
     "id": 1,
     "title": "Опрос 1",
@@ -230,7 +230,7 @@ true
 **Guards:** UserSurveyGuard
 
 **Ответ:**
-```json
+```ts
 {
     "survey": {
         "id": 1,
@@ -265,7 +265,7 @@ true
 **Описание:** Получить опросы, доступные пользователю.
 
 **Ответ:**
-```json
+```ts
 [
     {
         "id": 1,
@@ -286,7 +286,7 @@ true
 **Guards:** UserSurveyGuard
 
 **Тело запроса:**
-```json
+```ts
 {
     "surveyId": 1,
     "answers": [
@@ -300,7 +300,7 @@ true
 ```
 
 **Ответ:**
-```json
+```ts
 true
 ````
 
@@ -314,7 +314,7 @@ true
 **Guards:** UserProfileGuard
 
 **Ответ:**
-```json
+```ts
 {
     "id": 1,
     "email": "example@example.com",
@@ -338,7 +338,7 @@ true
 
 **Тело запроса:**
 
-```json
+```ts
 {
     "email": "example@example.com",
     "password": "password123",
@@ -351,7 +351,7 @@ true
 ```
 
 **Ответ:**
-```json
+```ts
 {
     "id": 1,
     "email": "example@example.com",
@@ -375,7 +375,7 @@ true
 
 **Тело запроса:**
 
-```json
+```ts
 {
     "email": "newemail@example.com",
     "password": "newpassword123",
@@ -389,7 +389,7 @@ true
 ```
 
 **Ответ:**
-```json
+```ts
 [
     1,
     [
@@ -418,7 +418,7 @@ true
 
 **Ответ:**
 
-```json
+```ts
 204 No Content
 ```
 
@@ -429,7 +429,7 @@ true
 **Описание:** Аутентификация пользователя по электронной почте и паролю.
 
 **Тело запроса:**
-```json
+```ts
 {
     "email": "user@example.com",
     "password": "userpassword"
@@ -437,7 +437,7 @@ true
 ```
 **Ответ:**
 
-```json
+```ts
 {
     "access_token": "jwt_token"
 }
@@ -452,7 +452,7 @@ true
 
 **Ответ:**
 
-```json
+```ts
 {
     "id": 1,
     "email": "user@example.com",
@@ -473,3 +473,21 @@ true
 
 ## UserProfileGuard
 **Описание:** Предоставляет доступ к профилю пользователя только самому пользователю (id).
+
+# Enums
+## AnswerTypeEnum (типы ответов)
+```ts
+}
+  'Текст' = 0,
+  'Один из списка' = 1,
+  'Несколько из списка' = 2,
+}
+```
+
+## UserSexEnum (пол пользователя)
+```ts
+}
+  'Мужской' = 0,
+  'Женский' = 1,
+}
+```
