@@ -3,7 +3,7 @@ name: questionnaire
 services:
   backend:
     restart: unless-stopped
-    image: registry.qpilipp.ru/psu-mkr-2024/5-fanclub/questionnaire-server:${CI_COMMIT_TAG:?error}
+    image: registry.qpilipp.ru/psu-mkr-2024/5-fanclub/questionnaire:${CI_COMMIT_TAG:?error}
     environment:
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
