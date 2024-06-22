@@ -5,10 +5,18 @@ services:
     restart: unless-stopped
     image: registry.qpilipp.ru/psu-mkr-2024/5-fanclub/questionnaire:${CI_COMMIT_TAG:?error}
     environment:
+      - SQL_DIALECT=postgres
+      - SQL_LOGGING=true
       - DATABASE_HOST=db
+      - DATABASE_USER=postgres
+      - DATABASE_NAME=questionnaire
+      - DATABASE_PASSWORD=6666
       - DATABASE_PORT=5432
+      - JWT_SECRET=secret-secret
     networks:
       - quest-net
+    ports:
+      - 5172:3000
     volumes:
 
   frontend:
@@ -16,9 +24,6 @@ services:
     image: registry.qpilipp.ru/psu-mkr-2024/5-fanclub/questionnaire-client:${CI_COMMIT_TAG:?error}
     ports:
       - 5173:5555
-    environment:
-      - API_HOST=backend
-      - API_PORT=3000
     networks:
       - quest-net
     volumes:
@@ -30,6 +35,8 @@ services:
       - questionnaire_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=6666
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=questionnaire
     networks:
       - quest-net
 
