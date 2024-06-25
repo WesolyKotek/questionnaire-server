@@ -46,6 +46,7 @@ build-push:
 
   before_script:
     - export IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - time docker build -t $IMAGE -f docker/Dockerfile .
     - docker push $IMAGE
