@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { Survey } from './survey.model';
-import { AnswerTypeEnum } from '../enums/answer-type.enum';
+import { QuestionTypeEnum } from '../enums/question-type.enum';
 
 @Table
 export class Question extends Model<Question> {
@@ -43,13 +43,13 @@ export class Question extends Model<Question> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  answerType: AnswerTypeEnum;
+  questionType: QuestionTypeEnum;
 
   @Column({
     type: DataType.JSON,
     allowNull: true,
   })
-  answerOptions: { optionCount: number; optionTitle: string }[]; // JSON формат вариантов ответа
+  questionOptions: { optionCount: number; optionTitle: string }[]; // JSON формат вариантов ответа
 
   @Column({
     type: DataType.INTEGER,

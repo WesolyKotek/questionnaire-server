@@ -1,5 +1,5 @@
 import { IsJSON, IsNumber } from 'class-validator';
-import { AnswerTypeEnum } from '../enums/answer-type.enum';
+import { QuestionTypeEnum } from '../enums/question-type.enum';
 
 export class CreateQuestion {
   @IsNumber()
@@ -10,7 +10,7 @@ export class CreateQuestion {
     readonly questionId: number;
     readonly title: string;
     readonly description?: string;
-    readonly answerType: AnswerTypeEnum;
+    readonly questionType: QuestionTypeEnum;
     readonly answerOptions?: { optionCount: number; optionTitle: string }[];
     readonly maxAnswerCount?: number;
     readonly attachedImages?: string[];
