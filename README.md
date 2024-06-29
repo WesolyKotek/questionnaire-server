@@ -230,6 +230,21 @@ true;
 ```ts
 204 No Content
 ```
+## **Endpoint:** '/images'
+### 1. Загрузить изображение
+**Метод:** POST /:id(surveyId)
+
+**Описание:** Загрузить изображение в вопрос.
+
+**Guards:** AdminGuard
+
+**Тело запроса:**
+```ts
+{
+    @UploadedFile() file
+}
+```
+
 
 ## **Endpoint:** '/images'
 
@@ -533,6 +548,16 @@ true;
     "isAdmin": false
 }
 ```
+## **Endpoint:** '/images'
+### 1. Получить изображение
+**Метод:** GET /:id(surveyId)/:filename
+
+**Описание:** Получить изображение в вопросе.
+
+**Guards:** UserSurveyGuard
+
+**Тело запроса:**
+...
 
 ## **Endpoint:** '/images'
 
@@ -566,9 +591,13 @@ true;
 **Описание:** Предоставляет доступ к профилю пользователя только самому пользователю (id).
 
 # Enums
+<<<<<<< HEAD
 
 ## QuestionTypeEnum (типы ответов)
 
+=======
+## QuestionTypeEnum (типы ответов)
+>>>>>>> b85ab845b4ca9d122e11642f84b443a00c335a31
 ```ts
 }
   'Текст' = 0,
