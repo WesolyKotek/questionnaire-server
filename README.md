@@ -63,8 +63,8 @@
         {
             "title": "Вопрос 1",
             "description": "Описание вопроса 1",
-            "answerType": 1,
-            "answerOptions": [
+            "questionType": 1,
+            "questionOptions": [
                 {
                     "optionCount": 1,
                     "optionTitle": "Ответ 1"
@@ -201,6 +201,21 @@ true
 ```ts
 204 No Content
 ```
+## **Endpoint:** '/images'
+### 1. Загрузить изображение
+**Метод:** POST /:id(surveyId)
+
+**Описание:** Загрузить изображение в вопрос.
+
+**Guards:** AdminGuard
+
+**Тело запроса:**
+```ts
+{
+    @UploadedFile() file
+}
+```
+
 
 # user
 ## **Endpoint:** `/surveys`
@@ -244,15 +259,15 @@ true
             "id": 1,
             "title": "Вопрос 1",
             "description": "Описание вопроса 1",
-            "answerType": 1,
-            "answerOptions": [
+            "questionType": 1,
+            "questionOptions": [
                 {
                     "optionCount": 1,
                     "optionTitle": "Ответ 1"
                 }
             ],
             "maxAnswerCount": 1,
-            "attachedImages": ["image1.png"]
+            "attachedImages": ["uploads/image1.png"]
         },
         ...
     ]
@@ -460,6 +475,16 @@ true
     "isAdmin": false
 }
 ```
+## **Endpoint:** '/images'
+### 1. Получить изображение
+**Метод:** GET /:id(surveyId)/:filename
+
+**Описание:** Получить изображение в вопросе.
+
+**Guards:** UserSurveyGuard
+
+**Тело запроса:**
+...
 
 # Guards
 ## AuthGuard
@@ -475,12 +500,13 @@ true
 **Описание:** Предоставляет доступ к профилю пользователя только самому пользователю (id).
 
 # Enums
-## AnswerTypeEnum (типы ответов)
+## QuestionTypeEnum (типы ответов)
 ```ts
 }
   'Текст' = 0,
   'Один из списка' = 1,
   'Несколько из списка' = 2,
+  'Файл' = 3,
 }
 ```
 
