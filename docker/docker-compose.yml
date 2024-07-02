@@ -17,7 +17,6 @@ services:
       - quest-net
     ports:
       - 5172:3000
-    volumes:
 
   frontend:
     restart: unless-stopped
@@ -26,8 +25,7 @@ services:
       - 5173:5173
     networks:
       - quest-net
-    volumes:
-    
+
   db:
     image: postgres:16.2
     restart: unless-stopped
