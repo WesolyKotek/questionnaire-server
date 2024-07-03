@@ -22,12 +22,6 @@ export class Question extends Model<Question> {
   survey: Survey;
 
   @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  questionId: number;
-
-  @Column({
     type: DataType.STRING,
     allowNull: false,
   })
