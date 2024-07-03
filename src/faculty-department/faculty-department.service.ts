@@ -18,6 +18,10 @@ export class FacultyDepartmentService {
     private facultyDepartmentModel: typeof FacultyDepartment,
   ) {}
 
+  async findAll(): Promise<FacultyDepartment[]> {
+    return this.facultyDepartmentModel.findAll();
+  }
+
   async findById(id: number): Promise<FacultyDepartment> {
     const facultyDepartment = await this.facultyDepartmentModel.findByPk(id);
 

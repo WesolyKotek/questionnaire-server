@@ -13,12 +13,19 @@ import { AdminGuard } from 'src/admin/admin.guard';
 import { FacultyDepartmentService } from './faculty-department.service';
 import { CreateFacultyDepartment } from './dto/create-faculty-department.dto';
 import { UpdateFacultyDepartment } from './dto/update-faculty-department.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('facultyDepartment')
 export class FacultyDepartmentController {
   constructor(
     private readonly facultyDepartmentService: FacultyDepartmentService,
   ) {}
+
+  @Public()
+  @Get()
+  findAll() {
+    return this.facultyDepartmentService.findAll();
+  }
 
   @Get(':id')
   @UseGuards(AdminGuard)
