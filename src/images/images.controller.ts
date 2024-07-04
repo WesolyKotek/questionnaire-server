@@ -14,12 +14,17 @@ import { ImagesService } from './images.service';
 import { Response } from 'express';
 import { AdminGuard } from '../admin/admin.guard';
 import { UserSurveyGuard } from '../survey/survey.guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOperation,
+} from '@nestjs/swagger';
 
 @Controller('images')
 export class ImagesController {
   constructor(private readonly imageService: ImagesService) {}
 
+  @ApiOperation({ summary: 'Загрузить изображение.' })
   @ApiBearerAuth()
   @Post(':id')
   @UseGuards(AdminGuard)
@@ -31,6 +36,10 @@ export class ImagesController {
     return this.imageService.uploadFile(file, surveyId);
   }
 
+  @ApiOperation({ summary: 'Получить изображение в вопросе.' })
+  @ApiNotFoundResponse({
+    description: 'Image with filename ${filename} not found',
+  })
   @ApiBearerAuth()
   @Get(':id/:filename')
   @UseGuards(UserSurveyGuard)

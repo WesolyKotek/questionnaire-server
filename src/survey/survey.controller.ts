@@ -17,12 +17,18 @@ import { UserSurveyGuard } from './survey.guard';
 import { User } from '../user/decorators/user.decorator';
 import { CreateUserAnswer } from './dto/create-user-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOperation,
+} from '@nestjs/swagger';
 
 @Controller('surveys')
 export class SurveyController {
   constructor(private readonly surveyService: SurveyService) {}
 
+  @ApiOperation({ summary: 'Получить все опросы.' })
   @ApiBearerAuth()
   @Get('admin')
   @UseGuards(AdminGuard)
@@ -30,6 +36,10 @@ export class SurveyController {
     return this.surveyService.findAll();
   }
 
+  @ApiOperation({ summary: 'Получить опрос по его ID.' })
+  @ApiNotFoundResponse({
+    description: 'Survey with id ${id} not found',
+  })
   @ApiBearerAuth()
   @Get(':id')
   @UseGuards(UserSurveyGuard)
@@ -37,6 +47,13 @@ export class SurveyController {
     return this.surveyService.findById(id);
   }
 
+  @ApiOperation({ summary: 'Получить опрос и его вопросы по ID опроса.' })
+  @ApiNotFoundResponse({
+    description: 'Survey with id ${id} not found',
+  })
+  @ApiForbiddenResponse({
+    description: 'The survey has already been completed',
+  })
   @ApiBearerAuth()
   @Get(':id/start')
   @UseGuards(UserSurveyGuard)
@@ -47,6 +64,7 @@ export class SurveyController {
     return this.surveyService.findSurveyAndQuestions(user.id, id);
   }
 
+  @ApiOperation({ summary: 'Получить опросы, доступные пользователю.' })
   @ApiBearerAuth()
   @Get()
   findAccessible(@User() user) {
@@ -56,6 +74,7 @@ export class SurveyController {
     );
   }
 
+  @ApiOperation({ summary: 'Создать новый опрос.' })
   @ApiBearerAuth()
   @Post()
   @UseGuards(AdminGuard)
@@ -63,6 +82,7 @@ export class SurveyController {
     return this.surveyService.createSurvey(createSurvey);
   }
 
+  @ApiOperation({ summary: 'Добавить вопросы к опросу.' })
   @ApiBearerAuth()
   @Post(':id/question')
   @UseGuards(AdminGuard)
@@ -73,6 +93,10 @@ export class SurveyController {
     return this.surveyService.createQuestions(id, createQuestion);
   }
 
+  @ApiOperation({ summary: 'Ответить на вопросы опроса.' })
+  @ApiForbiddenResponse({
+    description: 'The survey has already been completed',
+  })
   @ApiBearerAuth()
   @Post()
   @UseGuards(UserSurveyGuard)
@@ -80,6 +104,7 @@ export class SurveyController {
     return this.surveyService.saveUserAnswers(user.id, createUserAnswer);
   }
 
+  @ApiOperation({ summary: 'Обновить существующий опрос.' })
   @ApiBearerAuth()
   @Patch(':id')
   @UseGuards(AdminGuard)
@@ -90,6 +115,10 @@ export class SurveyController {
     return this.surveyService.update(id, updateSurvey);
   }
 
+  @ApiOperation({ summary: 'Удалить опрос.' })
+  @ApiForbiddenResponse({
+    description: 'Survey with id ${id} not found',
+  })
   @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AdminGuard)

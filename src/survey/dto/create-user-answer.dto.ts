@@ -10,6 +10,10 @@ export class CreateUserAnswer {
     items: {
       oneOf: [{ type: 'number' }, { type: 'any' }],
     },
+    example: [
+      [0, 'answer0'],
+      [1, 'answer1'],
+    ],
   })
   @IsJSON()
   readonly answers: {

@@ -10,12 +10,22 @@ import {
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { Public } from './decorators/public.decorator';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({
+    summary: 'Аутентификация пользователя по электронной почте и паролю.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Password is incorrect',
+  })
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -23,6 +33,9 @@ export class AuthController {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
+  @ApiOperation({
+    summary: 'Получение данных профиля аутентифицированного пользователя.',
+  })
   @ApiBearerAuth()
   @Get('profile')
   getProfile(@Request() req) {
