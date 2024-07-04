@@ -30,7 +30,7 @@ export class CreateUser {
 
   @IsNumber()
   @IsNotEmpty()
-  @ApiProperty({ enum: UserSexEnum })
+  @ApiProperty({ enum: UserSexEnum, enumName: 'UserSexEnum' })
   readonly sex: UserSexEnum;
 
   @IsDate()

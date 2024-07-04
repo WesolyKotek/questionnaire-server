@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional, IsDate, IsJSON } from 'class-validator';
 
 export class CreateSurvey {
@@ -16,9 +17,11 @@ export class CreateSurvey {
 
   @IsOptional()
   @IsJSON()
+  @ApiProperty({ type: [Number] })
   readonly userAccess?: number[];
 
   @IsOptional()
   @IsJSON()
+  @ApiProperty({ type: [Number] })
   readonly facultyAccess?: number[];
 }

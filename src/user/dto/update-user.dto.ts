@@ -30,7 +30,7 @@ export class UpdateUser {
 
   @IsNumber()
   @IsOptional()
-  @ApiProperty({ enum: UserSexEnum })
+  @ApiProperty({ enum: UserSexEnum, enumName: 'UserSexEnum' })
   readonly sex?: UserSexEnum;
 
   @IsDate()

@@ -17,11 +17,13 @@ import { CreateUser } from './dto/create-user.dto';
 import { UpdateUser } from './dto/update-user.dto';
 import { UserProfileGuard } from './user.guard';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('/users')
 export class UserContoller {
   constructor(private readonly userService: UserService) {}
 
+  @ApiBearerAuth()
   @UseGuards(UserProfileGuard)
   @Get(':id')
   getById(@Param('id', ParseIntPipe) id: number) {
@@ -36,6 +38,7 @@ export class UserContoller {
     return this.userService.create(createUser);
   }
 
+  @ApiBearerAuth()
   @UseGuards(UserProfileGuard)
   @Patch(':id')
   updateUser(
@@ -45,6 +48,7 @@ export class UserContoller {
     return this.userService.update(id, updateUser);
   }
 
+  @ApiBearerAuth()
   @UseGuards(UserProfileGuard)
   @Delete(':id')
   deleteUser(@Param('id', ParseIntPipe) id: number) {

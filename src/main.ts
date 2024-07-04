@@ -6,6 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Questionnaire API')
     .setDescription('The Questionnaire API description')
     .setVersion('1.0')

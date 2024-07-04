@@ -17,23 +17,27 @@ import { UserSurveyGuard } from './survey.guard';
 import { User } from '../user/decorators/user.decorator';
 import { CreateUserAnswer } from './dto/create-user-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('surveys')
 export class SurveyController {
   constructor(private readonly surveyService: SurveyService) {}
 
+  @ApiBearerAuth()
   @Get('admin')
   @UseGuards(AdminGuard)
   findAll() {
     return this.surveyService.findAll();
   }
 
+  @ApiBearerAuth()
   @Get(':id')
   @UseGuards(UserSurveyGuard)
   findById(@Param('id', ParseIntPipe) id: number) {
     return this.surveyService.findById(id);
   }
 
+  @ApiBearerAuth()
   @Get(':id/start')
   @UseGuards(UserSurveyGuard)
   findSurveyAndQuestionsById(
@@ -43,6 +47,7 @@ export class SurveyController {
     return this.surveyService.findSurveyAndQuestions(user.id, id);
   }
 
+  @ApiBearerAuth()
   @Get()
   findAccessible(@User() user) {
     return this.surveyService.findAccessibleSurveys(
@@ -51,12 +56,14 @@ export class SurveyController {
     );
   }
 
+  @ApiBearerAuth()
   @Post()
   @UseGuards(AdminGuard)
   createSurvey(@Body() createSurvey: CreateSurvey) {
     return this.surveyService.createSurvey(createSurvey);
   }
 
+  @ApiBearerAuth()
   @Post(':id/question')
   @UseGuards(AdminGuard)
   createQuestions(
@@ -66,12 +73,14 @@ export class SurveyController {
     return this.surveyService.createQuestions(id, createQuestion);
   }
 
+  @ApiBearerAuth()
   @Post()
   @UseGuards(UserSurveyGuard)
   writeAnswers(@User() user, @Body() createUserAnswer: CreateUserAnswer) {
     return this.surveyService.saveUserAnswers(user.id, createUserAnswer);
   }
 
+  @ApiBearerAuth()
   @Patch(':id')
   @UseGuards(AdminGuard)
   update(
@@ -81,6 +90,7 @@ export class SurveyController {
     return this.surveyService.update(id, updateSurvey);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AdminGuard)
   remove(@Param('id', ParseIntPipe) id: number) {

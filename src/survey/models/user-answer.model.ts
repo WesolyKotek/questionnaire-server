@@ -9,9 +9,11 @@ import {
 import { Survey } from './survey.model';
 import { Question } from './question.model';
 import { User } from 'src/user/models/user.model';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Table
 export class UserAnswer extends Model<UserAnswer> {
+  @ApiProperty()
   @ForeignKey(() => Survey)
   @Column({
     type: DataType.INTEGER,
@@ -22,6 +24,7 @@ export class UserAnswer extends Model<UserAnswer> {
   @BelongsTo(() => Survey, { onDelete: 'CASCADE' })
   survey: Survey;
 
+  @ApiProperty()
   @ForeignKey(() => Question)
   @Column({
     type: DataType.INTEGER,
@@ -32,6 +35,7 @@ export class UserAnswer extends Model<UserAnswer> {
   @BelongsTo(() => Question, { onDelete: 'CASCADE' })
   question: Question;
 
+  @ApiProperty()
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
@@ -42,12 +46,14 @@ export class UserAnswer extends Model<UserAnswer> {
   @BelongsTo(() => User)
   user: User;
 
+  @ApiProperty()
   @Column({
     type: DataType.JSON,
     allowNull: true,
   })
   answer: any;
 
+  @ApiProperty()
   @Column({
     type: DataType.DATE,
     allowNull: false,

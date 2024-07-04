@@ -14,11 +14,13 @@ import { ImagesService } from './images.service';
 import { Response } from 'express';
 import { AdminGuard } from '../admin/admin.guard';
 import { UserSurveyGuard } from '../survey/survey.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('images')
 export class ImagesController {
   constructor(private readonly imageService: ImagesService) {}
 
+  @ApiBearerAuth()
   @Post(':id')
   @UseGuards(AdminGuard)
   @UseInterceptors(FileInterceptor('file'))
@@ -29,6 +31,7 @@ export class ImagesController {
     return this.imageService.uploadFile(file, surveyId);
   }
 
+  @ApiBearerAuth()
   @Get(':id/:filename')
   @UseGuards(UserSurveyGuard)
   async getImage(
