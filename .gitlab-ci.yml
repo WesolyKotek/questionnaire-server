@@ -55,14 +55,12 @@ build-push:
 postgres-auth:
   rules:
     - if: '$CI_COMMIT_TAG != null'
-      when: manual
   services:
-    - postgres
+    - postgres:16.2
   variables:
     POSTGRES_DB: questionnaire
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: 6666
-  image: postgres
   stage: postgres-auth
   script:
     - export PGPASSWORD=$POSTGRES_PASSWORD
