@@ -8,6 +8,7 @@ import {
   IsDate,
 } from 'class-validator';
 import { UserSexEnum } from '../enums/user-sex.enum';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUser {
   @IsEmail()
@@ -29,6 +30,7 @@ export class UpdateUser {
 
   @IsNumber()
   @IsOptional()
+  @ApiProperty({ enum: UserSexEnum })
   readonly sex?: UserSexEnum;
 
   @IsDate()
