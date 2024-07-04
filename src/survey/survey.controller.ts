@@ -47,6 +47,17 @@ export class SurveyController {
     return this.surveyService.findById(id);
   }
 
+  @ApiOperation({ summary: 'Получить статистику опроса по его ID.' })
+  @ApiNotFoundResponse({
+    description: 'Survey with id ${id} not found',
+  })
+  @ApiBearerAuth()
+  @Get(':id/statistic')
+  @UseGuards(AdminGuard)
+  async getSurveyStatistic(@Param('id', ParseIntPipe) id: number) {
+    return this.surveyService.getStatistic(id);
+  }
+
   @ApiOperation({ summary: 'Получить опрос и его вопросы по ID опроса.' })
   @ApiNotFoundResponse({
     description: 'Survey with id ${id} not found',

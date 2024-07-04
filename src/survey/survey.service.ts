@@ -12,6 +12,7 @@ import { Question } from './models/question.model';
 import { CreateUserAnswer } from './dto/create-user-answer.dto';
 import { UserAnswer } from './models/user-answer.model';
 import { CreateQuestion } from './dto/create-question.dto';
+import { User } from 'src/user/models/user.model';
 
 @Injectable()
 export class SurveyService {
@@ -22,6 +23,8 @@ export class SurveyService {
     private questionModel: typeof Question,
     @InjectModel(UserAnswer)
     private userAnswerModel: typeof UserAnswer,
+    @InjectModel(User)
+    private userModel: typeof User,
   ) {}
 
   async findAll(): Promise<Survey[]> {
@@ -34,6 +37,67 @@ export class SurveyService {
       throw new NotFoundException(`Survey with id ${id} not found`);
     }
     return survey;
+  }
+
+  async getStatistic(id: number) {
+    const survey = await this.surveyModel.findByPk(id);
+
+    if (!survey) {
+      throw new NotFoundException(`Survey with id ${id} not found`);
+    }
+
+    const totalUsers = await this.userModel.count({
+      where: {
+        [Op.or]: [
+          { id: { [Op.in]: survey.userAccess } },
+          { facultyDepartmentId: { [Op.in]: survey.facultyAccess } },
+        ],
+      },
+    });
+
+    const passedUsersCount = await this.userAnswerModel.count({
+      where: { surveyId: id },
+      group: ['userId'],
+    });
+
+    const passedUsers = await this.userAnswerModel.findAll({
+      where: { surveyId: id },
+      attributes: ['userId'],
+      group: ['userId'],
+    });
+
+    const passedUserIds = passedUsers.map((userAnswer) => userAnswer.userId);
+
+    const departments = survey.facultyAccess;
+    const departmentStats = [];
+
+    for (const departmentId of departments) {
+      const departmentUsersCount = await this.userModel.count({
+        where: { facultyDepartmentId: departmentId },
+      });
+
+      const departmentPassedUsersCount = await this.userAnswerModel.count({
+        where: {
+          surveyId: id,
+          userId: { [Op.in]: passedUserIds },
+          '$user.facultyDepartmentId$': departmentId,
+        },
+        include: [{ model: User, attributes: [] }],
+      });
+
+      departmentStats.push({
+        departmentId,
+        passedUsers: departmentPassedUsersCount,
+        notPassedUsers: departmentUsersCount - departmentPassedUsersCount,
+      });
+    }
+
+    return {
+      totalUsers,
+      passedUsers: passedUsersCount.length,
+      notPassedUsers: totalUsers - passedUsersCount.length,
+      departmentStats,
+    };
   }
 
   async findSurveyAndQuestions(
