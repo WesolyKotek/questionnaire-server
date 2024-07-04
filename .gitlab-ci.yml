@@ -3,6 +3,7 @@ default:
 
 stages:
   - test
+  - postgres-auth
   - deploy
   - build-push
   - pack
@@ -50,6 +51,22 @@ build-push:
   script:
     - time docker build -t $IMAGE -f docker/Dockerfile .
     - docker push $IMAGE
+
+postgres-auth:
+  rules:
+    - if: '$CI_COMMIT_TAG != null'
+      when: manual
+  services:
+    - postgres
+  variables:
+    POSTGRES_DB: questionnaire
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: 6666
+  image: postgres
+  stage: postgres-auth
+  script:
+    - export PGPASSWORD=$POSTGRES_PASSWORD
+    - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
 
 deploy:
   rules:
