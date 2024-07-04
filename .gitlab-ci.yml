@@ -3,10 +3,10 @@ default:
 
 stages:
   - test
-  - postgres-auth
-  - deploy
   - build-push
   - pack
+  - postgres-auth
+  - deploy
 
 .ssh_defaults:
   image: kroniak/ssh-client
