@@ -109,7 +109,7 @@ export class SurveyController {
     description: 'The survey has already been completed',
   })
   @ApiBearerAuth()
-  @Post(':id/question')
+  @Post(':id/answer')
   @UseGuards(UserSurveyGuard)
   writeAnswers(
     @User() user,
