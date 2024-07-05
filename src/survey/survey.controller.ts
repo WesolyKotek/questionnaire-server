@@ -79,10 +79,7 @@ export class SurveyController {
   @ApiBearerAuth()
   @Get()
   findAccessible(@User() user) {
-    return this.surveyService.findAccessibleSurveys(
-      user.id,
-      user.facultyDepartmentId,
-    );
+    return this.surveyService.findAccessibleSurveys(user.id, user.faculty);
   }
 
   @ApiOperation({ summary: 'Создать новый опрос.' })
