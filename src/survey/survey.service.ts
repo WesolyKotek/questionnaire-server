@@ -50,7 +50,11 @@ export class SurveyService {
       where: {
         [Op.or]: [
           { id: { [Op.in]: survey.userAccess } },
-          { facultyDepartmentId: { [Op.in]: survey.facultyAccess } },
+          {
+            facultyDepartmentId: {
+              [Op.and]: [{ [Op.in]: survey.facultyAccess }, { [Op.ne]: null }],
+            },
+          },
         ],
       },
     });
@@ -208,7 +212,7 @@ export class SurveyService {
   async checkAccess(
     id: number,
     userId: number,
-    facultyDepartmentId: number,
+    facultyDepartmentId: number | null,
   ): Promise<boolean> {
     const survey = await this.findById(id);
     const { userAccess, facultyAccess } = survey;
@@ -225,16 +229,24 @@ export class SurveyService {
 
   async findAccessibleSurveys(
     userId: number,
-    facultyDepartmentId: number,
+    facultyDepartmentId: number | null,
   ): Promise<Survey[]> {
-    const surveys = this.surveyModel.findAll({
+    const whereConditions: any[] = [
+      { userAccess: { [Op.contains]: [userId] } },
+    ];
+
+    if (facultyDepartmentId !== null) {
+      whereConditions.push({
+        facultyAccess: { [Op.contains]: [facultyDepartmentId] },
+      });
+    }
+
+    const surveys = await this.surveyModel.findAll({
       where: {
-        [Op.or]: [
-          { userAccess: { [Op.contains]: [userId] } },
-          { facultyAccess: { [Op.contains]: [facultyDepartmentId] } },
-        ],
+        [Op.or]: whereConditions,
       },
     });
+
     return surveys;
   }
 }
