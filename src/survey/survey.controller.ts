@@ -109,9 +109,13 @@ export class SurveyController {
     description: 'The survey has already been completed',
   })
   @ApiBearerAuth()
-  @Post('/question')
+  @Post(':id/question')
   @UseGuards(UserSurveyGuard)
-  writeAnswers(@User() user, @Body() createUserAnswer: CreateUserAnswer) {
+  writeAnswers(
+    @User() user,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createUserAnswer: CreateUserAnswer,
+  ) {
     return this.surveyService.saveUserAnswers(user.id, createUserAnswer);
   }
 
