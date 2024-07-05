@@ -217,14 +217,14 @@ export class SurveyService {
     const survey = await this.findById(id);
     const { userAccess, facultyAccess } = survey;
 
-    if (
-      userAccess?.includes(userId) ||
-      facultyAccess?.includes(facultyDepartmentId)
-    ) {
-      return true;
-    }
+    const userHasAccess = userAccess?.includes(userId);
 
-    return false;
+    const facultyHasAccess =
+      facultyDepartmentId !== null
+        ? facultyAccess?.includes(facultyDepartmentId)
+        : false;
+
+    return userHasAccess || facultyHasAccess;
   }
 
   async findAccessibleSurveys(
