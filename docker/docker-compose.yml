@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
     image: registry.qpilipp.ru/psu-mkr-2024/5-fanclub/questionnaire-client:${CI_COMMIT_TAG:?error}
     ports:
-      - 5173:80
+      - 5173:4173
     networks:
       - questionnaire-net
 
